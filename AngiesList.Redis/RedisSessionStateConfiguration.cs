@@ -38,6 +38,10 @@ namespace AngiesList.Redis
         /// </summary>
         public int SessionTimeout { get; set; }
 
+        /// <summary>
+        /// The serialization provider to use for session objects
+        /// </summary>
+        public IValueSerializer SessionSerializer { get; set; }
         #endregion
 
 
@@ -73,7 +77,23 @@ namespace AngiesList.Redis
             Configure(x => x.LoadFromWebConfig());
         }
 
+        /// <summary>
+        /// Configures <see cref="SessionSerializer"/> to use the <see cref="ClrBinarySerializer"/>
+        /// </summary>
+        public void SetSerializationBinary()
+        {
+            SessionSerializer = new ClrBinarySerializer();
+        }
 
+        /// <summary>
+        /// Configures <see cref="SessionSerializer"/> to use the <see cref="SSJsonSerializer"/> (ServiceStack.Text JSON)
+        /// </summary>
+        public void SetSerializationJson()
+        {
+            SessionSerializer = new SSJsonSerializer();
+        }
+        
+        
         /// <summary>
         /// Loads settings from the regular sessionState section in web.config.
         /// </summary>
@@ -95,8 +115,8 @@ namespace AngiesList.Redis
 
             SessionTimeout = (int)config.Timeout.TotalMinutes;
 
-
-
+            // default to binary serialization
+            SetSerializationBinary();
         }
     }
 }

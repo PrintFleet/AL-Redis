@@ -26,12 +26,13 @@ namespace AngiesList.Redis
 		private const string TYPE_PREFIX = "__CLR_TYPE__";
 		private const string VALUE_PREFIX = "val:";
 
-		public RedisSessionItemHash(string sessionId, int timeoutMinutes, RedisConnection redisConnection)
+		public RedisSessionItemHash(string sessionId, int timeoutMinutes, RedisConnection redisConnection, IValueSerializer serializer)
 			: base()
 		{
 			this.sessionId = sessionId;
 			this.timeoutMinutes = timeoutMinutes;
 			this.redis = redisConnection;
+            this.serializer = serializer;
 			SetTasks = new List<Task>();
 		}
 

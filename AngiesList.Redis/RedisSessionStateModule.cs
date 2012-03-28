@@ -18,7 +18,7 @@ namespace AngiesList.Redis
 		private ISessionIDManager sessionIDManager;
 
 		private RedisConnection redisConnection;
-        private RedisSessionStateConfiguration redisConfig;
+		private RedisSessionStateConfiguration redisConfig;
 
 
 		public void Init(HttpApplication app)
@@ -27,7 +27,7 @@ namespace AngiesList.Redis
 				lock (typeof(RedisSessionStateModule)) {
 					if (!initialized) {
 
-                        redisConfig = RedisSessionStateConfiguration.GetConfiguration();
+						redisConfig = RedisSessionStateConfiguration.GetConfiguration();
 			
 						// Add event handlers.
 						app.AcquireRequestState += new EventHandler(this.OnAcquireRequestState);
@@ -52,7 +52,7 @@ namespace AngiesList.Redis
 				lock (typeof(RedisSessionStateModule)) {
 					if (redisConnection.NeedsReset()) {
 
-                        redisConnection = new RedisConnection(redisConfig.Host, redisConfig.Port);
+						redisConnection = new RedisConnection(redisConfig.Host, redisConfig.Port);
 						redisConnection.Closed += (object sender, EventArgs e) => {
 							//Debug.WriteLine("redisConnection closed");
 						};
@@ -107,7 +107,7 @@ namespace AngiesList.Redis
 
 			releaseCalled = false;
 
-			sessionItemCollection = new RedisSessionItemHash(sessionId, redisConfig.SessionTimeout, GetRedisConnection());
+			sessionItemCollection = new RedisSessionItemHash(sessionId, redisConfig.SessionTimeout, GetRedisConnection(), redisConfig.SessionSerializer);
 
 			if (sessionItemCollection.Count == 0) {
 				isNew = true;
