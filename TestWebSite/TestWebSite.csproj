@@ -18,6 +18,8 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <UseIISExpress>false</UseIISExpress>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\AL-Redis\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -136,4 +138,5 @@
       <Name>AngiesList.Redis</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>
