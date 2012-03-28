@@ -9,56 +9,57 @@ namespace AngiesList.Redis
 {
 	public class SSJsonSerializer : IValueSerializer
 	{
-        public class CacheContainer
+        public class CacheContainer<T>
         {
-            public Type Type { get; set; }
-            public string Value { get; set; }
-        }
+            public CacheContainer() : base() 
+            {
+                this.Type = typeof(T).AssemblyQualifiedName;
+            }
+            
+            public CacheContainer(T value) : this() 
+            {
+                this.Value = value;
+            }
 
-        //public class CacheContainerTyped<T>
-        //{
-        //    public T Value { get; set; }
-        //}
+            public string Type { get; set; }
+            public T Value { get; set; }
+        }
 
 		public byte[] Serialize(object value)
 		{
-            CacheContainer item = null;
+            //CacheContainer item = null;
+
             if (value != null)
             {
-                item = new CacheContainer()
-                {
-                    Type = value.GetType(),
-                    Value = JsonSerializer.SerializeToString(value, value.GetType()),
-                };
+                var t = typeof(CacheContainer<>).MakeGenericType(value.GetType());
+                var item = Activator.CreateInstance(t,value);
+                
+                var memStream = new MemoryStream(4);
+                JsonSerializer.SerializeToStream(item, memStream);
+                var bytes = memStream.ToArray();
+                memStream.Close();
+                return bytes;
             }
 
-			var memStream = new MemoryStream(4);
-			JsonSerializer.SerializeToStream(item, memStream);
-			var bytes = memStream.ToArray();
-			memStream.Close();
-			return bytes;
+            return new byte[] { }; // empty array
 		}
 
 		public object Deserialize(byte[] bytes)
 		{
-            var memStream = new MemoryStream(bytes);
-            var item = ServiceStack.Text.JsonSerializer.DeserializeFromStream<CacheContainer>(memStream);
-            memStream.Close();
+            var x = JsonObject.Parse(System.Text.Encoding.Default.GetString(bytes));
 
-            if (item is CacheContainer && item != null)
-            {
-                return Deserialize(item.Type, item.Value);
-            }
-            else
-            {
+            if (x == null)
                 return null;
-            }
-            
-		}
 
-		public object Deserialize(Type type, string serialized)
-		{
-            return ServiceStack.Text.JsonSerializer.DeserializeFromString(serialized, type);
+            string typeName, jsonValue;
+            if (x.TryGetValue("Type", out typeName) && x.TryGetValue("Value", out jsonValue))
+            {
+                var valueType = Type.GetType(typeName);
+                var item = JsonSerializer.DeserializeFromString(jsonValue, valueType);
+                return item;
+            }
+
+            return null;
 		}
 
 	}
