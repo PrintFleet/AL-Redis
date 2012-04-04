@@ -108,6 +108,7 @@ namespace AngiesList.Redis
 			releaseCalled = false;
 
 			sessionItemCollection = new RedisSessionItemHash(sessionId, redisConfig.SessionTimeout, GetRedisConnection(), redisConfig.SessionSerializer);
+            sessionItemCollection.DeserializationError += (sender, e) => redisConfig.RaiseDeserializationError(this, e);
 
 			if (sessionItemCollection.Count == 0) {
 				isNew = true;

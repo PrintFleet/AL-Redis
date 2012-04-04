@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="BooksleeveExtensions.cs" />
     <Compile Include="Bucket.cs" />
+    <Compile Include="DeserializationErrorEventArgs.cs" />
     <Compile Include="SSTypeSerializer.cs" />
     <Compile Include="RedisConfiguration.cs" />
     <Compile Include="RedisSessionItemHash.cs" />

@@ -182,7 +182,19 @@ namespace AngiesList.Redis
 		public object this[string name]
 		{
 			get {
-				return Get(name);
+                try 
+                {
+				    return Get(name);
+                }
+                catch (Exception ex) 
+                {
+                    var eventArgs = new DeserializationErrorEventArgs() { Exception = ex };
+                    DeserializationError(this, eventArgs);
+                    if (!eventArgs.ExceptionHandled)
+                        throw ex;
+                    else
+                        return null;
+                }
 			}
 			set {
 				Set(name, value);
@@ -264,5 +276,10 @@ namespace AngiesList.Redis
 				throw new NotImplementedException();
 			}
 		}
+
+        /// <summary>
+        /// Event raised when there is a deserialization error
+        /// </summary>
+        public event EventHandler<DeserializationErrorEventArgs> DeserializationError;
 	}
 }

@@ -128,5 +128,16 @@ namespace AngiesList.Redis
             // default to binary serialization
             SetSerializationBinary();
         }
+        
+        /// <summary>
+        /// Event raised when there is a deserialization error
+        /// </summary>
+        public event EventHandler<DeserializationErrorEventArgs> DeserializationError;
+
+        internal void RaiseDeserializationError(object sender, DeserializationErrorEventArgs e)
+        {
+            DeserializationError(sender, e);
+        }
+
     }
 }
