@@ -92,7 +92,17 @@ namespace AngiesList.Redis
         {
             SessionSerializer = new SSJsonSerializer();
         }
-        
+
+        /// <summary>
+        /// Configures <see cref="SessionSerializer"/> to use the <see cref="SSTypeSerializer"/> (ServiceStack.Text TypeSerializer).
+        /// This type is more compact than regular JSON, and can handle more complex objects. Although it looks
+        /// similar to JSON, it is not compatible with JSON deserializers.
+        /// See https://github.com/ServiceStack/ServiceStack.Text/wiki/JSV-Format for more details.
+        /// </summary>
+        public void SetSerializationJsv()
+        {
+            SessionSerializer = new SSTypeSerializer();
+        }
         
         /// <summary>
         /// Loads settings from the regular sessionState section in web.config.
