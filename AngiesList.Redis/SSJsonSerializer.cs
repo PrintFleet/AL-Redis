@@ -58,6 +58,10 @@ namespace AngiesList.Redis
             if (x.TryGetValue("Type", out typeName) && x.TryGetValue("Value", out jsonValue))
             {
                 var valueType = Type.GetType(typeName);
+
+                if (valueType == null)
+                    throw new InvalidCastException(String.Format("Unknown type: {0}", typeName));
+
                 var item = JsonSerializer.DeserializeFromString(jsonValue, valueType);
                 return item;
             }

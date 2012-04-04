@@ -57,6 +57,9 @@ namespace AngiesList.Redis
 
             var valueType = Type.GetType(x.Type);
             
+            if (valueType == null)
+                throw new InvalidCastException(String.Format("Unknown type: {0}", x.Type));
+
             // special handling for empty string
             if (valueType == typeof(string) && x.Value == null)
                 return string.Empty;
