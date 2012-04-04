@@ -7,6 +7,9 @@ using System.IO;
 
 namespace AngiesList.Redis
 {
+    /// <summary>
+    /// ServiceStack.Text JSON serializer.
+    /// </summary>
 	public class SSJsonSerializer : IValueSerializer
 	{
         public class CacheContainer<T>
