@@ -2,14 +2,12 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
 namespace AngiesList.Redis.Tests
 {
-    [TestClass] // MStest
-    [TestFixture] // NUnit
+    [TestFixture] 
     public class SSTypeSerializerTests
     {
 
@@ -19,7 +17,6 @@ namespace AngiesList.Redis.Tests
             public string SomeValue { get; set; }
         }
 
-        [TestMethod]
         [Test]
         public void SimpleObjectRoundTrip()
         {
@@ -39,7 +36,6 @@ namespace AngiesList.Redis.Tests
         }
 
 
-        [TestMethod]
         [Test]
         public void DictionaryRoundTrip()
         {
@@ -62,7 +58,6 @@ namespace AngiesList.Redis.Tests
         }
 
 
-        [TestMethod]
         [Test]
         public void DictionaryComplexKeyRoundTrip()
         {
@@ -85,7 +80,6 @@ namespace AngiesList.Redis.Tests
 
 
 
-        [TestMethod]
         [Test]
         public void DeserializeEmptyBytesReturnsNull()
         {
@@ -98,7 +92,6 @@ namespace AngiesList.Redis.Tests
 
 
 
-        [TestMethod]
         [Test]
         public void EmptyStringRoundTrip()
         {
